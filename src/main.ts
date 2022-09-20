@@ -13,14 +13,25 @@ const ONOMATOPEIAS = [
   "Pupupu",
 ];
 const ALLOWED_MESSAGES = [...ONOMATOPEIAS, DICE_COMMAND];
-const ALLOWED_USERS: Record<string, number> = {
-  Carlos: 3455205,
-};
+const ALLOWED_USERS: Record<string, number> = Object.fromEntries(
+  (process.env.ALICIAGRAM_ALLOWED_USERS || "").split(";").map((chunk) => {
+    const [user, chatId] = chunk.split(":");
+    return [user, parseInt(chatId)];
+  })
+);
+
+console.log(ALLOWED_USERS);
 
 if (!process.env.ALICIAGRAM_BOT_TOKEN)
   throw new Error("ALICIAGRAM_BOT_TOKEN env var is missing");
 
 const bot = new Telegraf(process.env.ALICIAGRAM_BOT_TOKEN);
+
+bot.start(async (ctx) => {
+  const user = getMatchingUser(ctx.chat.id);
+  if (user == null) return;
+  await ctx.reply("👋", replyKeyboardWithButtons(ALLOWED_MESSAGES));
+});
 
 bot.on("text", async (ctx) => {
   const user = getMatchingUser(ctx.chat.id);
@@ -30,7 +41,7 @@ bot.on("text", async (ctx) => {
 
   if (ALLOWED_MESSAGES.indexOf(message) === -1) {
     await ctx.reply(
-      "???? usa el teclao",
+      "???? usa los botoncitos, mi no entender 🤷",
       replyKeyboardWithButtons(ALLOWED_MESSAGES)
     );
     return;
