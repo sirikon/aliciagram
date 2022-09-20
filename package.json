@@ -1,7 +1,9 @@
 {
   "scripts": {
     "start": "ts-node-dev src/main.ts",
-    "build": "tsc --project ."
+    "lint": "prettier --check ./src",
+    "lint:fix": "prettier --write ./src",
+    "build": "npm run -s lint && tsc --project ."
   },
   "dependencies": {
     "telegraf": "^4.9.2"
