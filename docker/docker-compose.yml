@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  aliciagram:
+    image: "sirikon/aliciagram:${ALICIAGRAM_TAG:-dev}"
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile

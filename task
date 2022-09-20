@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+commands=(
+  docker-publish
+)
+
+function docker-publish { (
+  version="$(date +'%Y%m%d_%H%M%S')"
+  cd docker
+  export ALICIAGRAM_TAG="${version}"
+  docker-compose build
+
+  printf "%s" "${DOCKER_TOKEN}" | docker login --username sirikon --password-stdin
+  docker-compose push
+
+  printf "Published version: %s\n" "${version}"
+); }
+
+function help {
+  printf "%s\n" "Available commands:"
+  printf " %s\n" "${commands[@]}" help
+}
+
+function run-command {
+  command="$1"
+  for c in "${commands[@]}"; do
+    if [ "$c" = "$command" ]; then
+      ("$command" "${@:2}")
+      return
+    fi
+  done
+  printf "%s\n" "Command '${command}' does not exist."
+}
+
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")"
+[ -z "${1:-""}" ] || [ "${1:-""}" = "help" ] && help && exit 0
+run-command "${1}" "${@:2}"

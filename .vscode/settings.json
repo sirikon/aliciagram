@@ -14,5 +14,11 @@
   },
   "[python]": {
     "editor.tabSize": 4
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[dockercompose]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
   }
 }
