@@ -21,8 +21,6 @@ const ALLOWED_USERS: Record<string, number> = Object.fromEntries(
   })
 );
 
-console.log(ALLOWED_USERS);
-
 if (!process.env.ALICIAGRAM_BOT_TOKEN)
   throw new Error("ALICIAGRAM_BOT_TOKEN env var is missing");
 
@@ -73,7 +71,6 @@ function replyKeyboardWithButtons(buttons: string[]): ExtraReplyMessage {
   for (let i = 0; i < buttons.length; i += BUTTON_COLUMNS) {
     const row: KeyboardButton[] = [];
     for (let x = 0; x < BUTTON_COLUMNS; x++) {
-      console.log(i, x);
       const text = buttons[i + x];
       if (text != null) {
         row.push({ text });
