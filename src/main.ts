@@ -1,3 +1,4 @@
+import { createServer } from "http";
 import { Telegraf } from "telegraf";
 import { KeyboardButton } from "telegraf/typings/core/types/typegram";
 import { ExtraReplyMessage } from "telegraf/typings/telegram-types";
@@ -65,8 +66,14 @@ function getMatchingUser(chatId: number): string | null {
   return matches ? matches[0] : null;
 }
 
-bot.launch();
-
 // Enable graceful stop
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
+
+if (process.env.ALICIAGRAM_USE_POOLING === "true") {
+  bot.launch();
+} else {
+  bot.createWebhook({ domain: "aliciagram.srk.bz" }).then((webhook) => {
+    createServer(webhook).listen(80);
+  });
+}

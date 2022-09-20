@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "ts-node-dev src/main.ts",
+    "start": "ALICIAGRAM_USE_POOLING=true ts-node-dev src/main.ts",
     "lint": "prettier --check ./src",
     "lint:fix": "prettier --write ./src",
     "build": "npm run -s lint && tsc --project ."
