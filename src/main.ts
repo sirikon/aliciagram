@@ -34,10 +34,14 @@ bot.start(async (ctx) => {
 });
 
 bot.on("text", async (ctx) => {
+  const message = ctx.message.text;
+  if (message === "dime quien soy") {
+    await ctx.reply(ctx.chat.id.toString());
+    return;
+  }
+
   const user = getMatchingUser(ctx.chat.id);
   if (user == null) return;
-
-  const message = ctx.message.text;
 
   if (ALLOWED_MESSAGES.indexOf(message) === -1) {
     await ctx.reply(
