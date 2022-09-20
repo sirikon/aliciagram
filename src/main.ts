@@ -3,6 +3,7 @@ import { Telegraf } from "telegraf";
 import { KeyboardButton } from "telegraf/typings/core/types/typegram";
 import { ExtraReplyMessage } from "telegraf/typings/telegram-types";
 
+const BUTTON_COLUMNS = 2;
 const DICE_COMMAND = "Ay no se";
 const ONOMATOPEIAS = [
   "Miau Miau",
@@ -57,6 +58,7 @@ bot.on("text", async (ctx) => {
   }
 
   for (const [_, chatId] of Object.entries(ALLOWED_USERS)) {
+    if (chatId === ctx.chat.id) continue;
     await bot.telegram.sendMessage(
       chatId,
       `${user}: ${message}`,
@@ -66,9 +68,23 @@ bot.on("text", async (ctx) => {
 });
 
 function replyKeyboardWithButtons(buttons: string[]): ExtraReplyMessage {
+  const keyboardButtons: KeyboardButton[][] = [];
+
+  for (let i = 0; i < buttons.length; i += BUTTON_COLUMNS) {
+    const row: KeyboardButton[] = [];
+    for (let x = 0; x < BUTTON_COLUMNS; x++) {
+      console.log(i, x);
+      const text = buttons[i + x];
+      if (text != null) {
+        row.push({ text });
+      }
+    }
+    keyboardButtons.push(row);
+  }
+
   return {
     reply_markup: {
-      keyboard: buttons.map((b): KeyboardButton[] => [{ text: b }]),
+      keyboard: keyboardButtons,
       resize_keyboard: true,
     },
   };
@@ -76,7 +92,7 @@ function replyKeyboardWithButtons(buttons: string[]): ExtraReplyMessage {
 
 function getMatchingUser(chatId: number): string | null {
   const matches = Object.entries(ALLOWED_USERS).find(
-    ([n, id]) => chatId === id
+    ([_, id]) => chatId === id
   );
   return matches ? matches[0] : null;
 }
