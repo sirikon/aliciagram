@@ -12,6 +12,8 @@ const ONOMATOPEIAS = [
   "Pium Pium",
   "Pipoto",
   "Pupupu",
+  "Wluwluwlu🦃🦃",
+  "Bllbllbl🐙🐙",
 ];
 const ALLOWED_MESSAGES = [...ONOMATOPEIAS, DICE_COMMAND];
 const ALLOWED_USERS: Record<string, number> = Object.fromEntries(
